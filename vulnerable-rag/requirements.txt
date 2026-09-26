@@ -1,0 +1,18 @@
+# Core Dependencies for Prompt Injection RAG System
+
+# LLM & Embeddings
+llama-cpp-python>=0.2.0    # LLM inference (Gemma 3 4B)
+sentence-transformers>=2.2.0  # Embedding generation
+torch>=2.0.0               # PyTorch (for embeddings)
+
+# Vector Database
+numpy>=1.24.0              # Numerical operations
+# sqlite3 is built-in to Python
+
+# Configuration & Utilities
+pyyaml>=6.0                # YAML config files
+tiktoken>=0.5.0            # Token counting (optional)
+
+# Optional: For testing/development
+pytest>=7.4.0
+pytest-cov>=4.1.0

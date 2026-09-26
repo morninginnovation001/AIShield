@@ -1,0 +1,83 @@
+# ==============================================================================
+# AIShield Security Configuration
+# ==============================================================================
+
+system:
+  name: "AIShield"
+  version: "1.0.0"
+  environment: "production"
+
+# Risk Engine Thresholds & Severity Weights
+risk:
+  block_threshold: 50        # Overall risk score >= 50 triggers BLOCK
+  warn_threshold: 25         # Overall risk score >= 25 triggers WARNING/SANITIZE
+  max_score: 100
+  severity_weights:
+    low: 10
+    medium: 25
+    high: 50
+    critical: 90
+
+# Input Guardrails: Direct Prompt Injection & Jailbreak Defense
+input_guard:
+  enabled: true
+  block_on_high: true
+  scan_base64: true
+  scan_hex: true
+  check_length_anomaly: true
+  max_input_length: 4096
+
+# Retrieval Guardrails: Indirect Context Poisoning & Prompt Hijacking Defense
+retrieval_guard:
+  enabled: true
+  enforce_data_fencing: true
+  fence_start: "<<<UNTRUSTED_EXTERNAL_CONTEXT>>>"
+  fence_end: "<<<END_UNTRUSTED_EXTERNAL_CONTEXT>>>"
+  strip_template_tokens: true
+  defang_exfiltration_links: true
+  block_on_critical: false   # Sanitize and fence by default instead of blocking retrieval
+
+# Tool Guardrails: Tool Execution & Parameter Validation
+tool_guard:
+  enabled: true
+  enforce_whitelist: true
+  allowed_tools:
+    - "calculator"
+    - "file_reader"
+    - "database_query"
+    - "web_search"
+  blocked_tools:
+    - "shell_exec"
+    - "system_command"
+    - "bash"
+    - "python_exec"
+    - "eval"
+  allowed_directories:
+    - "data"
+    - "docs"
+    - "public"
+    - "reports"
+  block_path_traversal: true
+  block_dangerous_sql: true
+  block_command_injection: true
+
+# Output Guardrails: Sensitive Information & Secret Leakage Defense
+output_guard:
+  enabled: true
+  redact_pii: true
+  redact_secrets: true
+  block_on_critical_leak: true
+  redaction_mask: "[REDACTED:{label}]"
+
+# Audit Logging Configuration
+audit:
+  enabled: true
+  log_file: "audit/events.jsonl"
+  log_clean_queries: true
+  max_snippet_len: 200
+
+# Dashboard Configuration
+dashboard:
+  host: "127.0.0.1"
+  port: 5000
+  debug: false

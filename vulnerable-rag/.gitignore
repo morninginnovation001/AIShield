@@ -1,0 +1,35 @@
+## Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+
+## Data
+data/
+*.db
+*.pkl
+
+## Models
+models/
+*.gguf
+
+## IDE
+.vscode/
+.idea/
+*.swp
+
+## Logs
+logs/
+*.log
+
+## Experiments
+experiments/*/results/
+experiments/*/logs/
+
+## Local configuration
+CLAUDE.md
+.serena/

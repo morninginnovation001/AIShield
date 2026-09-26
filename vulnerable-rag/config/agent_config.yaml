@@ -1,0 +1,58 @@
+# Agent Configuration for Prompt Injection RAG
+# Settings for the agentic layer (tool calling, ReACT loop, etc.)
+
+# ReACT Agent Settings
+react:
+  max_iterations: 10              # Maximum reasoning loop iterations
+  max_tool_calls: 20               # Maximum tool calls per query
+  thought_prefix: "Thought:"       # Prefix for agent thoughts
+  action_prefix: "Action:"         # Prefix for agent actions
+  observation_prefix: "Observation:"  # Prefix for observations
+  final_answer_prefix: "Final Answer:"  # Prefix for final answer
+  temperature: 0.7                 # LLM temperature for reasoning
+  enable_logging: true             # Log all agent actions
+
+# Tool Registry Settings
+tools:
+  enabled:
+    - calculator                   # Math operations
+    - file_reader                  # Read files (attack vector!)
+    - web_search                   # Mock web search
+    - database_query               # Query mock database
+
+  # Tool-specific settings
+  calculator:
+    max_expression_length: 1000
+
+  file_reader:
+    allowed_directories:           # Whitelist (for defense testing)
+      - "data/corpus"
+      - "data/test"
+    max_file_size_kb: 1024
+
+  web_search:
+    max_results: 5
+    mock_mode: true                # Use mock search results
+
+  database_query:
+    mock_mode: true                # Use mock database
+    max_results: 100
+
+# Tool Call Parsing (Gemma 3 format)
+parsing:
+  format: "json"                   # Expected tool call format
+  strict_validation: false         # Strict JSON validation (disable for attack research)
+  allow_malformed: true            # Allow malformed tool calls for research
+
+# Safety & Guardrails (intentionally minimal for research)
+safety:
+  require_approval: false          # Require human approval for tool execution
+  whitelist_only: false            # Only allow whitelisted tools
+  validate_parameters: false       # Validate tool parameters
+  sandbox_execution: false         # Execute tools in sandbox
+
+# Memory & State Management
+memory:
+  max_history_length: 10           # Maximum conversation turns to remember
+  include_tool_outputs: true       # Include tool outputs in memory
+  persist_state: false             # Persist state to disk
