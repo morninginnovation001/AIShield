@@ -1,5 +1,8 @@
 """Dashboard package for AIShield."""
 
-from .app import app, run_dashboard
+from .app import main
 
-__all__ = ["app", "run_dashboard"]
+run_dashboard = main
+
+__all__ = ["main", "run_dashboard"]
+

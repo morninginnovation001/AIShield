@@ -57,7 +57,9 @@ class AuditLogger:
         """Record an individual security decision event into events.jsonl."""
         event_id = f"EVT-{uuid.uuid4().hex[:8].upper()}"
         req_id = request_id or f"REQ-{uuid.uuid4().hex[:6].upper()}"
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now = datetime.now().astimezone()
+        now_iso = now.isoformat()
+        local_time_str = now.strftime("%H:%M:%S")
 
         snippet = (query or "").strip()
         if len(snippet) > self.max_snippet_len:
@@ -106,6 +108,7 @@ class AuditLogger:
         event_record = {
             "event_id": event_id,
             "timestamp": now_iso,
+            "local_time": local_time_str,
             "request_id": req_id,
             "attack_type": attack_type,
             "stage": stage.upper(),
